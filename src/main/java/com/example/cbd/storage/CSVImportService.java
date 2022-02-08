@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.io.FileReader;
 
 @Service
-public class CsvImportService {
+public class CSVImportService {
 
     public static void readDataLineByLine(String file)
     {

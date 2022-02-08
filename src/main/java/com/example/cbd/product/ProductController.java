@@ -19,10 +19,10 @@ public class ProductController {
 
     private final ProductModelAssembler assembler;
 
-    private final CsvExportService csvExportService;
+    private final CSVExportService csvExportService;
 
     @Autowired
-    public ProductController(ProductService productService, ProductModelAssembler assembler, CsvExportService csvExportService) {
+    public ProductController(ProductService productService, ProductModelAssembler assembler, CSVExportService csvExportService) {
         this.productService = productService;
         this.assembler = assembler;
         this.csvExportService = csvExportService;
@@ -58,9 +58,9 @@ public class ProductController {
     }
 
     @GetMapping(path = "export")
-    public void writeToCsv(HttpServletResponse servletResponse) throws IOException {
+    public void writeToCSV(HttpServletResponse servletResponse) throws IOException {
         servletResponse.setContentType("text/csv");
         servletResponse.addHeader("Content-Disposition","attachment; filename=\"products.csv\"");
-        csvExportService.writeToCsv(servletResponse.getWriter());
+        csvExportService.writeToCSV(servletResponse.getWriter());
     }
 }

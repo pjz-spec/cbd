@@ -11,17 +11,17 @@ import java.io.Writer;
 import java.util.List;
 
 @Service
-public class CsvExportService {
+public class CSVExportService {
     
-    private  static final Logger log = LoggerFactory.getLogger(CsvExportService.class);
+    private  static final Logger log = LoggerFactory.getLogger(CSVExportService.class);
 
     private final ProductRepository productRepository;
 
-    public CsvExportService(ProductRepository productRepository) {
+    public CSVExportService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
-    public void writeToCsv(Writer writer) {
+    public void writeToCSV(Writer writer) {
         List<Product> products = productRepository.findAll();
         try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
             csvPrinter.printRecord("id", "name", "description", "price", "location", "brand", "type", "material", "upper", "outsole", "insole");
