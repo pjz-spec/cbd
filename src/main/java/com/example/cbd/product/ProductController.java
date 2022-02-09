@@ -50,11 +50,21 @@ public class ProductController {
         productService.deleteProduct(productId);
     }
 
+    @DeleteMapping
+    public void deleteAllProducts() {
+        productService.deleteAllProducts();
+    }
+
     @PutMapping(path = "{productId}")
     public void updateProduct(
             @PathVariable("productId") Long productId,
             @RequestParam(required = false) String name) {
         productService.updateProduct(productId, name);
+    }
+
+    @PostMapping(path = "store")
+    public void storeAllProducts() {
+        productService.storeAllProducts();
     }
 
     @GetMapping(path = "export")

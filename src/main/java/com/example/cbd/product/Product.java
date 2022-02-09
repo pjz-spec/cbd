@@ -3,9 +3,7 @@ package com.example.cbd.product;
 import javax.persistence.*;
 
 @Entity
-@Table(
-        name = "product"
-)
+@Table(name = "product")
 public class Product {
     @Id
     @SequenceGenerator(

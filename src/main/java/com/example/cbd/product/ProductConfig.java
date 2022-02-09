@@ -82,10 +82,24 @@ public class ProductConfig {
                     "EVA"
             );
 
+            Product harry = new Product(
+                    "Harry",
+                    "springy",
+                    159.95,
+                    "Great Britain",
+                    "Saucony",
+                    "Sneakers",
+                    "Synthetic",
+                    "Synthetic",
+                    "Synthetic",
+                    "Synthetic"
+            );
+
             repository.saveAll(
-                    List.of(ghost, edward)
+                    List.of(ghost, edward, harry)
             );
         };
 
     }
+
 }

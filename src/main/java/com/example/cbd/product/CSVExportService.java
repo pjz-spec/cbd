@@ -1,5 +1,6 @@
 package com.example.cbd.product;
 
+import com.example.cbd.storage.DeliveryInfoRepository;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.slf4j.Logger;
@@ -17,17 +18,25 @@ public class CSVExportService {
 
     private final ProductRepository productRepository;
 
-    public CSVExportService(ProductRepository productRepository) {
+    private final DeliveryInfoRepository deliveryInfoRepository;
+
+    private final CalculatorService calculatorService;
+
+    public CSVExportService(ProductRepository productRepository, DeliveryInfoRepository deliveryInfoRepository, CalculatorService calculatorService) {
         this.productRepository = productRepository;
+        this.deliveryInfoRepository = deliveryInfoRepository;
+        this.calculatorService = calculatorService;
     }
 
     public void writeToCSV(Writer writer) {
         List<Product> products = productRepository.findAll();
         try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
-            csvPrinter.printRecord("id", "name", "description", "price", "location", "brand", "type", "material", "upper", "outsole", "insole");
+            csvPrinter.printRecord("id", "name", "description", "price", "location", "brand", "type", "material", "upper", "outsole", "insole", "delivery_time", "amount", "vat");
             for (Product product : products) {
                 csvPrinter.printRecord(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getLocation(), product.getBrand(),
-                        product.getType(), product.getMaterial(), product.getUpper(), product.getOutsole(), product.getInsole());
+                        product.getType(), product.getMaterial(), product.getUpper(), product.getOutsole(), product.getInsole(),
+                        deliveryInfoRepository.findById(product.getId()).get().getDeliveryTime(), deliveryInfoRepository.findById(product.getId()).get().getAmount(),
+                        calculatorService.calcVat(product.getId()));
             }
         } catch (IOException e) {
             log.error("Error while writing CSV");

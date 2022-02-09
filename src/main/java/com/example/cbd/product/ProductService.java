@@ -1,21 +1,25 @@
 package com.example.cbd.product;
 
+import com.example.cbd.storage.DeliveryInfo;
+import com.example.cbd.storage.DeliveryInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
-//import java.util.Optional;
 
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
 
+    private final DeliveryInfoService deliveryInfoService;
+
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, DeliveryInfoService deliveryInfoService) {
         this.productRepository = productRepository;
+        this.deliveryInfoService = deliveryInfoService;
     }
 
     public List<Product> getAllProducts() {
@@ -46,6 +50,10 @@ public class ProductService {
         productRepository.findById(productId);
     }
 
+    public void deleteAllProducts() {
+        productRepository.deleteAll();
+    }
+
     @Transactional
     public void updateProduct(Long productId, String name) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalStateException("product with id " + productId + " does not exist"));
@@ -53,5 +61,14 @@ public class ProductService {
         if (name != null && name.length() > 0 && !Objects.equals(product.getName(), name)) {
             product.setName(name);
         }
+    }
+
+    public void storeAllProducts() {
+        DeliveryInfo info;
+        for (int i = 0; i < 3; i++) {
+            info = new DeliveryInfo(5, 100, "here");
+            deliveryInfoService.addNewDeliveryInfo(info);
+        }
+        System.out.println(deliveryInfoService.getDeliveryInfo(3L).getAmount());
     }
 }
