@@ -1,6 +1,8 @@
 package com.example.cbd.product;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
+import com.example.cbd.storage.CSVImportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -21,11 +23,14 @@ public class ProductController {
 
     private final CSVExportService csvExportService;
 
+    private final CSVImportService csvImportService;
+
     @Autowired
-    public ProductController(ProductService productService, ProductModelAssembler assembler, CSVExportService csvExportService) {
+    public ProductController(ProductService productService, ProductModelAssembler assembler, CSVExportService csvExportService, CSVImportService csvImportService) {
         this.productService = productService;
         this.assembler = assembler;
         this.csvExportService = csvExportService;
+        this.csvImportService = csvImportService;
     }
 
     @GetMapping
@@ -65,6 +70,16 @@ public class ProductController {
     @PostMapping(path = "store")
     public void storeAllProducts() {
         productService.storeAllProducts();
+    }
+
+    @GetMapping(path = "all")
+    public void readCSV() {
+        csvImportService.readDataLineByLine("src/main/resources/storage/products.csv");
+    }
+
+    @GetMapping(path = "details/{productId}")
+    public String details(@PathVariable("productId") Long productId) {
+        return csvImportService.readDataLine("src/main/resources/storage/products.csv", productId);
     }
 
     @GetMapping(path = "export")
